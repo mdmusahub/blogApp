@@ -8,6 +8,7 @@ import com.mecaps.blogApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,7 +49,6 @@ public class UsersServiceImpl implements UserService {
 
         Users users = usersRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("User id not found : " + id));
-
         return new UsersResponseDTO(users);
     }
 
@@ -60,6 +60,18 @@ public class UsersServiceImpl implements UserService {
         List<Users> all = usersRepository.findAll();
 
         return all.stream().map(UsersResponseDTO::new).toList(); // same work (loops)
+
+
+//        List<UsersResponseDTO> allUser = new ArrayList<>();
+//        for (Users user : all){
+//
+//            UsersResponseDTO usersResponseDTO = new UsersResponseDTO(user);
+//            allUser.add(usersResponseDTO);
+//
+//        }
+//        return allUser;
+
+
     }
 
 

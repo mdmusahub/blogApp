@@ -1,10 +1,8 @@
 package com.mecaps.blogApp.controller;
 
-
 import com.mecaps.blogApp.requestDTO.UserRequestDTO;
 import com.mecaps.blogApp.responseDTO.UsersResponseDTO;
 import com.mecaps.blogApp.service.UserService;
-import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
