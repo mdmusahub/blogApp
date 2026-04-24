@@ -7,7 +7,11 @@ import com.mecaps.blogApp.repository.UsersRepository;
 import com.mecaps.blogApp.requestDTO.PostRequestDTO;
 import com.mecaps.blogApp.responseDTO.PostResponseDTO;
 import com.mecaps.blogApp.service.PostService;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class PostServiceImpl implements PostService {
 
     private PostRepository postRepository;
@@ -30,4 +34,34 @@ public class PostServiceImpl implements PostService {
         Post savePost = postRepository.save(post);
         return new PostResponseDTO(savePost);
     }
+
+
+
+    @Override
+    public List<PostResponseDTO> findPostByAuthorId(Long id) {
+
+        List<Post> allPostOfUser = postRepository
+                .findByAuthor_Id(id);
+        return allPostOfUser.stream().map(PostResponseDTO::new).toList();
+    }
+
+    @Override
+    public List<PostResponseDTO> getAllPost(){
+        List<Post> all = postRepository.findAll();
+        return all.stream().map(PostResponseDTO::new).toList();
+    }
+
+    @Override
+    public PostResponseDTO updatePost(Long postId, PostRequestDTO requestDTO){
+
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new RuntimeException("Post id not found : " + postId));
+
+        post.setContent(requestDTO.getContent());
+        Post save = postRepository.save(post);
+        return new PostResponseDTO(save);
+
+    }
+
+
 }
