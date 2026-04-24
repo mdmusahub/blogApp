@@ -17,8 +17,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
 
-
-//
 //    "select * from post where author = 1"
 //    List<Post> findByAuthor(Long id);
 //
@@ -29,7 +27,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 //
 //    List<Post> findByAuthor_Id(Users user);
 
-//    List<Post> findByOrderByPostedAtDesc();
+//    List<Post> findAllByOrderByPostedAtDesc();
 
 
 }
