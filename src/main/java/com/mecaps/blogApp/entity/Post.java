@@ -29,4 +29,10 @@ public class Post {
     @ManyToOne
     private Users author;
 
+
+
+
+
+
+
 }

@@ -109,6 +109,7 @@ public class UsersServiceImpl implements UserService {
         Users users = usersRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("User id not found : " + id));
 
+
         usersRepository.delete(users);
 
         return "User Deleted Successfully!";

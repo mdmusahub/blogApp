@@ -18,4 +18,7 @@ public interface PostService {
 
     PostResponseDTO updatePost(Long postId, PostRequestDTO requestDTO);
 
+
+    String deletePostById(Long id);
+
 }
