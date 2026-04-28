@@ -3,10 +3,9 @@ package com.mecaps.blogApp.controller;
 import com.mecaps.blogApp.requestDTO.CommentRequestDTO;
 import com.mecaps.blogApp.responseDTO.CommentResponseDTO;
 import com.mecaps.blogApp.service.CommentService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
@@ -24,5 +23,32 @@ public class CommentController {
     public CommentResponseDTO createComment(@RequestBody CommentRequestDTO requestDTO){
         return commentService.createComment(requestDTO);
     }
+
+
+    @GetMapping("/getAllAuthorComment/{authorId}")
+    public List<CommentResponseDTO> getAllCommentByAuthorId(@PathVariable Long authorId){
+        List<CommentResponseDTO> allCommentByAuthor = commentService.getAllCommentByAuthor(authorId);
+        return allCommentByAuthor;
+    }
+
+    @PatchMapping("/update/{commentId}")
+    public CommentResponseDTO updateComment(@PathVariable Long commentId,
+                                            @RequestBody CommentRequestDTO requestDTO){
+        return commentService.commentUpdate(commentId, requestDTO);
+    }
+
+    @GetMapping("/getAll")
+    public List<CommentResponseDTO> getAll(){
+        return commentService.getAllComment();
+    }
+
+
+    @DeleteMapping("/delete/{commentId}")
+    public String deleteComment(@PathVariable Long commentId){
+        return commentService.deleteComment(commentId);
+    }
+
+
+
 }
 

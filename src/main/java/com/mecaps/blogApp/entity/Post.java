@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +30,12 @@ public class Post {
     @ManyToOne
     private Users author;
 
+
+
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true)
+    private List<Comment> comments;
 
 
 
