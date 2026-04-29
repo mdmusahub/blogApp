@@ -2,6 +2,7 @@ package com.mecaps.blogApp.serviceImpl;
 
 import com.mecaps.blogApp.entity.Post;
 import com.mecaps.blogApp.entity.Users;
+import com.mecaps.blogApp.exception.ResourcesNotFoundException;
 import com.mecaps.blogApp.repository.PostRepository;
 import com.mecaps.blogApp.repository.UsersRepository;
 import com.mecaps.blogApp.requestDTO.PostRequestDTO;
@@ -26,13 +27,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponseDTO createPost(PostRequestDTO requestDTO) {
         Users user = usersRepository.findById(requestDTO.getAuthorId()).orElseThrow(
-                () -> new RuntimeException("User id not found  : " + requestDTO.getAuthorId())
-        );
+                () -> new ResourcesNotFoundException("User id not found  : "
+                        + requestDTO.getAuthorId()));
+
         Post post = new Post();
         post.setContent(requestDTO.getContent());
         post.setAuthor(user);
         Post savePost = postRepository.save(post);
         return new PostResponseDTO(savePost);
+
     }
 
 
@@ -42,20 +45,32 @@ public class PostServiceImpl implements PostService {
 
         List<Post> allPostOfUser = postRepository
                 .findByAuthor_Id(id);
+
+        if (allPostOfUser.isEmpty())
+            throw new ResourcesNotFoundException("No Post Exist with This User/Author in DB");
+
         return allPostOfUser.stream().map(PostResponseDTO::new).toList();
     }
 
+
     @Override
     public List<PostResponseDTO> getAllPost(){
+
         List<Post> all = postRepository.findAll();
+
+        if (all.isEmpty())
+            throw new ResourcesNotFoundException("No Post Exist in DB");
+
         return all.stream().map(PostResponseDTO::new).toList();
     }
+
+
 
     @Override
     public PostResponseDTO updatePost(Long postId, PostRequestDTO requestDTO){
 
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new RuntimeException("Post id not found : " + postId));
+                () -> new ResourcesNotFoundException("Post id not found : " + postId));
 
         post.setContent(requestDTO.getContent());
         Post save = postRepository.save(post);
@@ -70,8 +85,7 @@ public class PostServiceImpl implements PostService {
     public String deletePostById(Long id){
 
         Post post = postRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Post id not found : " + id));
-
+                () -> new ResourcesNotFoundException("Post id not found : " + id));
 
         postRepository.delete(post);
         return "Deleted post...!";

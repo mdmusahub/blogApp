@@ -3,6 +3,7 @@ package com.mecaps.blogApp.controller;
 import com.mecaps.blogApp.requestDTO.CommentRequestDTO;
 import com.mecaps.blogApp.responseDTO.CommentResponseDTO;
 import com.mecaps.blogApp.service.CommentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,6 +50,13 @@ public class CommentController {
     }
 
 
+
+/*
+
+Status code
+Header
+Body Reponse (User, Post, Comment)
+* */
 
 }
 

@@ -5,6 +5,8 @@ import com.mecaps.blogApp.entity.Post;
 import com.mecaps.blogApp.requestDTO.PostRequestDTO;
 import com.mecaps.blogApp.responseDTO.PostResponseDTO;
 import com.mecaps.blogApp.service.PostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,10 +35,15 @@ public class PostController {
         return postService.getAllPost();
     }
 
+
     @PostMapping("/create")
-    public PostResponseDTO createPost(@RequestBody PostRequestDTO requestDTO){
-        return postService.createPost(requestDTO);
+    public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO requestDTO){
+
+        PostResponseDTO post = postService.createPost(requestDTO);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(post);
     }
+
 
 
     @PutMapping("/update/{id}")

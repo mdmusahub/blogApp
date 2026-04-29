@@ -1,6 +1,8 @@
 package com.mecaps.blogApp.serviceImpl;
 
 import com.mecaps.blogApp.entity.Users;
+import com.mecaps.blogApp.exception.ResourcesNotFoundException;
+import com.mecaps.blogApp.exception.UserNotFoundException;
 import com.mecaps.blogApp.repository.UsersRepository;
 import com.mecaps.blogApp.requestDTO.UserRequestDTO;
 import com.mecaps.blogApp.responseDTO.UsersResponseDTO;
@@ -48,7 +50,7 @@ public class UsersServiceImpl implements UserService {
     public UsersResponseDTO getById(Long id) {
 
         Users users = usersRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("User id not found : " + id));
+                () -> new ResourcesNotFoundException("User id not found : " + id));
         return new UsersResponseDTO(users);
     }
 
@@ -59,18 +61,10 @@ public class UsersServiceImpl implements UserService {
 
         List<Users> all = usersRepository.findAll();
 
+        if (all.isEmpty())
+            throw new ResourcesNotFoundException("No User Exist in DB");
+
         return all.stream().map(UsersResponseDTO::new).toList(); // same work (loops)
-
-
-//        List<UsersResponseDTO> allUser = new ArrayList<>();
-//        for (Users user : all){
-//
-//            UsersResponseDTO usersResponseDTO = new UsersResponseDTO(user);
-//            allUser.add(usersResponseDTO);
-//
-//        }
-//        return allUser;
-
 
     }
 
@@ -80,7 +74,7 @@ public class UsersServiceImpl implements UserService {
     public UsersResponseDTO updateUsers(Long id, UserRequestDTO request) {
 
         Users users = usersRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("User id not found : " + id));
+                () -> new ResourcesNotFoundException("User id not found : " + id));
 
         // .isEmpty() or .isBlank()
 
@@ -107,11 +101,9 @@ public class UsersServiceImpl implements UserService {
     public String deleteUser(Long id) {
 
         Users users = usersRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("User id not found : " + id));
-
+                () -> new ResourcesNotFoundException("User id not found : " + id));
 
         usersRepository.delete(users);
-
         return "User Deleted Successfully!";
     }
 

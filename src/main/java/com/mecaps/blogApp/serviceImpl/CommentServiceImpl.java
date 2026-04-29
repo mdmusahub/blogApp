@@ -3,6 +3,7 @@ package com.mecaps.blogApp.serviceImpl;
 import com.mecaps.blogApp.entity.Comment;
 import com.mecaps.blogApp.entity.Post;
 import com.mecaps.blogApp.entity.Users;
+import com.mecaps.blogApp.exception.ResourcesNotFoundException;
 import com.mecaps.blogApp.repository.CommentRepository;
 import com.mecaps.blogApp.repository.PostRepository;
 import com.mecaps.blogApp.repository.UsersRepository;
@@ -10,8 +11,6 @@ import com.mecaps.blogApp.requestDTO.CommentRequestDTO;
 import com.mecaps.blogApp.responseDTO.CommentResponseDTO;
 import com.mecaps.blogApp.service.CommentService;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,10 +38,13 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDTO createComment(CommentRequestDTO requestDTO) {
 
         Users user = usersRepository.findById(requestDTO.getAuthorId()).orElseThrow(
-                () -> new RuntimeException("User id not found : " + requestDTO.getAuthorId()));
+                () -> new ResourcesNotFoundException("User id not found : "
+                        + requestDTO.getAuthorId()));
 
         Post post = postRepository.findById(requestDTO.getPostId()).orElseThrow(
-                () -> new RuntimeException("Post id not found : " + requestDTO.getPostId()));
+                () -> new ResourcesNotFoundException("Post id not found : "
+                        + requestDTO.getPostId()));
+
 
         Comment comment = new Comment();
 
@@ -62,6 +64,10 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentResponseDTO> getAllCommentByAuthor(Long authorId) {
 
         List<Comment> all = commentRepository.findByAuthor_Id(authorId);
+
+        if (all.isEmpty())
+            throw new ResourcesNotFoundException("No, Comment Exist with this user ");
+
         return all.stream().map(CommentResponseDTO::new).toList();
 
 
@@ -79,7 +85,9 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDTO commentUpdate(Long commentId, CommentRequestDTO requestDTO) {
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow( () -> new RuntimeException("Comment id not found : " + commentId));
+                .orElseThrow( () -> new ResourcesNotFoundException("Comment id not found : "
+                        + commentId));
+
 
         comment.setCommentString(requestDTO.getCommentString());
 
@@ -99,13 +107,18 @@ public class CommentServiceImpl implements CommentService {
 
         List<Comment> commentList = commentRepository.findAll();
 
+        if (commentList.isEmpty())
+            throw new ResourcesNotFoundException("No Comment [exist in DB");
+
         return commentList.stream().map(CommentResponseDTO::new).toList();
     }
 
     @Override
     public String deleteComment(Long commentId) {
+
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow( () -> new RuntimeException("Comment id not found : " + commentId));
+                .orElseThrow( () -> new ResourcesNotFoundException("Comment id not found : "
+                        + commentId));
 
 
         commentRepository.delete(comment);

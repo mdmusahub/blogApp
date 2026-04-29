@@ -3,6 +3,8 @@ package com.mecaps.blogApp.controller;
 import com.mecaps.blogApp.requestDTO.UserRequestDTO;
 import com.mecaps.blogApp.responseDTO.UsersResponseDTO;
 import com.mecaps.blogApp.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,10 @@ public class UsersController {
 
 
     @GetMapping("/getById/{id}")
-    public UsersResponseDTO getUserById(@PathVariable Long id){
+    public ResponseEntity<?> getUserById(@PathVariable Long id){
        UsersResponseDTO usersResponseDTO =  userService.getById(id);
-       return usersResponseDTO;
+
+       return ResponseEntity.ok(usersResponseDTO);
     }
 
 
@@ -33,8 +36,10 @@ public class UsersController {
 
 
     @PostMapping("/create")
-    public UsersResponseDTO createUsers(@RequestBody UserRequestDTO requestDTO){
-        return userService.createUsers(requestDTO);
+    public ResponseEntity<?> createUsers(@RequestBody UserRequestDTO requestDTO){
+        UsersResponseDTO users = userService.createUsers(requestDTO);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(users);
     }
 
 
@@ -46,11 +51,10 @@ public class UsersController {
 
     @DeleteMapping("/delete/{userId}")
     public String deleteUser(@PathVariable Long userId){
-        return userService.deleteUser(userId);
+       return userService.deleteUser(userId);
+
+//        return ResponseEntity.noContent().build();
     }
-
-
-
 
 
 
