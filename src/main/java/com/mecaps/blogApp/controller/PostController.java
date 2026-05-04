@@ -5,6 +5,7 @@ import com.mecaps.blogApp.entity.Post;
 import com.mecaps.blogApp.requestDTO.PostRequestDTO;
 import com.mecaps.blogApp.responseDTO.PostResponseDTO;
 import com.mecaps.blogApp.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class PostController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO requestDTO){
+    public ResponseEntity<PostResponseDTO> createPost(@Valid @RequestBody PostRequestDTO requestDTO){
 
         PostResponseDTO post = postService.createPost(requestDTO);
 

@@ -25,3 +25,8 @@ public class PaymentController {
     }
 
 }
+
+//        Map<String , String> errors = new HashMap<>();
+//        exception.getBindingResult().getFieldErrors().forEach(error -> {
+//            errors.put(error.getField(), error.getDefaultMessage());
+//        });

@@ -3,6 +3,7 @@ package com.mecaps.blogApp.controller;
 import com.mecaps.blogApp.requestDTO.CommentRequestDTO;
 import com.mecaps.blogApp.responseDTO.CommentResponseDTO;
 import com.mecaps.blogApp.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class CommentController {
 
 
     @PostMapping("/create")
-    public CommentResponseDTO createComment(@RequestBody CommentRequestDTO requestDTO){
+    public CommentResponseDTO createComment(@Valid @RequestBody CommentRequestDTO requestDTO){
         return commentService.createComment(requestDTO);
     }
 

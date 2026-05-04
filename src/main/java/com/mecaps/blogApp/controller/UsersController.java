@@ -3,6 +3,7 @@ package com.mecaps.blogApp.controller;
 import com.mecaps.blogApp.requestDTO.UserRequestDTO;
 import com.mecaps.blogApp.responseDTO.UsersResponseDTO;
 import com.mecaps.blogApp.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class UsersController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createUsers(@RequestBody UserRequestDTO requestDTO){
+    public ResponseEntity<?> createUsers(@Valid @RequestBody UserRequestDTO requestDTO){
         UsersResponseDTO users = userService.createUsers(requestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(users);
@@ -58,7 +59,18 @@ public class UsersController {
 
 
 
-
-
-
 }
+
+
+    /*
+
+        public clas Product{
+            id
+            name
+            price
+            quantity
+
+            }
+
+     */
+

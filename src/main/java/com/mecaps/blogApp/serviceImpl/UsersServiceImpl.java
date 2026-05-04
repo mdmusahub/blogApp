@@ -9,6 +9,9 @@ import com.mecaps.blogApp.responseDTO.UsersResponseDTO;
 import com.mecaps.blogApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +74,7 @@ public class UsersServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public UsersResponseDTO updateUsers(Long id, UserRequestDTO request) {
 
         Users users = usersRepository.findById(id).orElseThrow(

@@ -9,6 +9,8 @@ import com.mecaps.blogApp.requestDTO.PostRequestDTO;
 import com.mecaps.blogApp.responseDTO.PostResponseDTO;
 import com.mecaps.blogApp.service.PostService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -67,6 +69,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
+    @Transactional()
     public PostResponseDTO updatePost(Long postId, PostRequestDTO requestDTO){
 
         Post post = postRepository.findById(postId).orElseThrow(
