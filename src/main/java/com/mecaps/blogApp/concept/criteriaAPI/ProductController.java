@@ -29,3 +29,23 @@ public class ProductController {
 //    http://localhost:8080/products/search?name=Laptop
     //http://localhost:8080/products/search?name=Laptop&category=Electronics&min=100&max=14000
 }
+
+
+
+
+
+
+// Swap alternative element in an Array
+
+// for example arr [1,2,3,6,4,5] // suppose array length is even num.
+// output -> [2,1,6,3,5,4] like that...
+
+
+
+
+
+
+
+
+
+

@@ -8,6 +8,7 @@ import com.mecaps.blogApp.requestDTO.UserRequestDTO;
 import com.mecaps.blogApp.responseDTO.UsersResponseDTO;
 import com.mecaps.blogApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,9 +22,11 @@ public class UsersServiceImpl implements UserService {
 
 
     private UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UsersServiceImpl(UsersRepository usersRepository) {
+    public UsersServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -36,7 +39,8 @@ public class UsersServiceImpl implements UserService {
 
         users.setUserName(request.getUserName());
         users.setEmail(request.getEmail());
-        users.setPassword(request.getPassword());
+//        users.setPassword(request.getPassword());
+        users.setPassword(passwordEncoder.encode(request.getPassword()));
         users.setRole("NormalUser");
 
         Users save = usersRepository.save(users);
@@ -90,7 +94,8 @@ public class UsersServiceImpl implements UserService {
             users.setEmail(request.getEmail());
 
         if (request.getPassword() != null && ! request.getPassword().isBlank())
-            users.setPassword(request.getPassword());
+//            users.setPassword(request.getPassword());
+            users.setPassword(passwordEncoder.encode(request.getPassword()));
 
 
         Users save = usersRepository.save(users);
