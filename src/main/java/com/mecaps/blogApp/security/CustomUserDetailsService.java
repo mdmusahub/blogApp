@@ -16,21 +16,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsersRepository usersRepository;
 
-
     public CustomUserDetailsService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Users users = usersRepository.findByUserName(userName).orElseThrow(
-                () -> new ResourcesNotFoundException("User Name is not found  : " + userName));
+        Users users = usersRepository.findByEmail(email).orElseThrow(
+                () -> new ResourcesNotFoundException("User Name is not found  : " + email));
 
 
        return User
-                .withUsername(users.getUserName())
+                .withUsername(users.getEmail())
                 .password(users.getPassword())
                 .roles(users.getRole())
                 .build();

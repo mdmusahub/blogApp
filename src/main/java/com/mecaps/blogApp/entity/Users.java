@@ -2,6 +2,7 @@ package com.mecaps.blogApp.entity;
 
 
 import jakarta.persistence.*;
+import lombok.CustomLog;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,8 @@ public class Users {
     @Column(unique = true, nullable = false)
     private String userName;
     private String password;
+
+    @Column(unique = true, nullable = false)
     private String email;
     private String role;
 

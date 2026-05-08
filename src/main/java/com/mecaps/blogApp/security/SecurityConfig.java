@@ -9,10 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+
+    private final JwtAuthFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
 
     @Bean
@@ -36,16 +44,25 @@ public class SecurityConfig {
                                                 "/actuator/beans",
                                                 "/actuator/metrics",
                                                 "/actuator/loggers",
-                                                "/actuator/threaddump").permitAll()
+                                                "/actuator/threaddump",
+                                                "/auth/login").permitAll()
 
-                                .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+                                .anyRequest().authenticated()
+
+                )
+//                .httpBasic(Customizer.withDefaults());
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
 
 
 }
+
+
+
+
+
 
 /*
 REQUEST FLOW BOTH CASES(PUBLIC / PROTECTED)
