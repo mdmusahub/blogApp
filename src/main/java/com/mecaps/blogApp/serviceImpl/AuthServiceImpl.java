@@ -43,10 +43,16 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Map<String , String> response = new HashMap<>();
+
         String accessToken = jwtService.accessToken(users.getEmail(), users.getRole());
+        String refreshToken = jwtService.refreshToken(users.getEmail(), users.getRole());
+
+
         response.put("accessToken" , accessToken);
+        response.put("refreshToken", refreshToken);
         response.put("role", users.getRole());
         response.put("userName", users.getUserName());
+
         return response;
 
 

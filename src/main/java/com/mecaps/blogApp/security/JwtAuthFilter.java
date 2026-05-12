@@ -39,18 +39,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             email = jwtService.getEmail(token);
         }
 
-        String tokenType = jwtService.getTokenType(token);
 
+        if (token != null && email != null &&
+                SecurityContextHolder.getContext().getAuthentication() == null){
 
-        if (tokenType != "accessToken"){
-            throw new RuntimeException("");
-        }
+            String tokenType = jwtService.getTokenType(token);
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            if (!"accessToken".equals(tokenType)){
+                throw new RuntimeException("Invalid Token Type");
+            }
 
             UserDetails userDetails1 = customUserDetailsService.loadUserByUsername(email);
 
-            if (jwtService.getExp(token)){
+            if (jwtService.isTokenValid(token)){
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails1, null,

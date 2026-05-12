@@ -15,6 +15,9 @@ public class JwtService {
 
 //    private static final String SECRET_KEY = "0123456789012345678901234567890123";
 
+    private static final long ACCESS_TOKEN_EXP_TIME = 1000 * 60 * 60; // 1 hour
+    private static final long REFRESH_TOKEN_EXP_TIME = 1000 * 60 * 60* 24 * 7; // 7 days
+
     @Value("${jwt.secret-key}")
     private String SECRET_KEY;
 
@@ -26,61 +29,51 @@ public class JwtService {
 
 
     public String accessToken(String email, String role){
-        return Jwts.builder()
-                .subject(email)
-                .claim("Role", role)
-                .claim("accessToken", String.class)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()  + 1000 * 60 * 60))
-                .signWith(getSecretKey())
-                .compact();
+
+        return buildToken(email, role, "accessToken", ACCESS_TOKEN_EXP_TIME);
 
     }
 
     public String refreshToken(String email, String role){
-        return Jwts.builder()
-                .subject(email)
-                .claim("Role", role)
-                .claim("refreshToken", String.class)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60
-                        * 60 * 24 * 7))
-                .signWith(getSecretKey())
-                .compact();
+
+        return buildToken(email, role, "refreshToken", REFRESH_TOKEN_EXP_TIME);
+
     }
 
 
-//    // utils method for creating a token.
-//
-//        private String buildToken(String email, String role,
-//                              String tokenType, long exp){
-//            return Jwts.builder()
-//                    .subject(email)
-//                    .claim("role", role)
-//                    .claim(tokenType, String.class)
-//                    .issuedAt(new Date(System.currentTimeMillis()))
-//                    .expiration(new Date(System.currentTimeMillis() + exp))
-//                    .signWith(getSecretKey())
-//                    .compact();
-//    }
+
+    // utils method for creating a token.
+    private String buildToken(String email, String role,
+                              String tokenType, long expTime){
+            return Jwts.builder()
+                    .subject(email)
+                    .claim("role", role)
+                    .claim("tokenType", tokenType)
+                    .issuedAt(new Date(System.currentTimeMillis()))
+                    .expiration(new Date(System.currentTimeMillis() + expTime))
+                    .signWith(getSecretKey())
+                    .compact();
+    }
 
     public String getEmail(String token){
         return extractAllClaims(token).getSubject();
     }
 
     public String getRole(String token){
-        return extractAllClaims(token).get("Role", String.class);
+        return extractAllClaims(token).get("role", String.class);
     }
 
     public String getTokenType(String token){
-        return extractAllClaims(token).get("accessToken", String.class);
+        return extractAllClaims(token).get("tokenType", String.class);
     }
 
-    public boolean getExp(String token){
+    public boolean isTokenValid(String token){
         Claims claims = extractAllClaims(token);
         return claims.getExpiration().after(new Date());
     }
-    // utitls methods
+
+
+    // utils methods
     private Claims extractAllClaims(String token){
         return Jwts.parser()
                 .verifyWith(getSecretKey())
